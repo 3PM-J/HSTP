@@ -1,0 +1,140 @@
+SISTEMA DE GESTION HOSPITALARIA - REGHOST
+==========================================
+
+ESTRUCTURA DEL PROYECTO
+-----------------------
+El proyecto HST está completamente implementado con:
+
+1. ENTIDADES (Modelos de Datos):
+   - Paciente: Gestión completa de pacientes
+   - Doctor: Registro de personal médico
+   - Emergencia: Control de emergencias
+
+2. REPOSITORIOS:
+   - PacienteRepository
+   - DoctorRepository
+   - EmergenciaRepository
+
+3. SERVICIOS:
+   - PacienteService
+   - DoctorService
+   - EmergenciaService
+
+4. CONTROLADORES:
+   - PacienteController
+   - DoctorController
+   - EmergenciaController
+   - MenuController
+
+5. SEGURIDAD:
+   - Spring Security configurado
+   - Usuarios predefinidos:
+     * Usuario: admin / Contraseña: admin123
+     * Usuario: user / Contraseña: user123
+
+6. VISTAS HTML (Ya existentes):
+   - Login.html
+   - menu.html
+   - Pacientes: lista, nuevo, editar
+   - Doctores: lista, nuevo, editar
+   - Emergencias: lista, nuevo, editar
+
+CONFIGURACION DE BASE DE DATOS
+--------------------------------
+El proyecto está configurado para usar PostgreSQL.
+
+1. CREAR LA BASE DE DATOS:
+   Opción A - Usar el script SQL:
+   - Ubicación: database/schema.sql
+   - Ejecutar: psql -U postgres -f database/schema.sql
+
+   Opción B - Crear manualmente:
+   CREATE DATABASE hst_db;
+
+2. VARIABLES DE ENTORNO:
+   Configurar en el archivo .env o como variables del sistema:
+   - DATABASE_URL=jdbc:postgresql://localhost:5432/hst_db
+   - DATABASE_USERNAME=postgres
+   - DATABASE_PASSWORD=postgres
+
+3. SPRING JPA:
+   - Configurado con hibernate.ddl-auto=update
+   - Las tablas se crean automáticamente al iniciar la aplicación
+
+COMPILAR Y EJECUTAR
+--------------------
+1. Compilar el proyecto:
+   ./mvnw clean install
+
+2. Ejecutar la aplicación:
+   ./mvnw spring-boot:run
+
+3. Acceder a la aplicación:
+   http://localhost:8080
+
+FLUJO DE LA APLICACIÓN
+-----------------------
+1. Ingresar a: http://localhost:8080
+2. Redirige al login
+3. Iniciar sesión con admin/admin123 o user/user123
+4. Acceder al menú principal con 3 opciones:
+   - Gestión de Pacientes
+   - Gestión de Doctores
+   - Gestión de Emergencias
+
+ESTRUCTURA DE LA BASE DE DATOS
+--------------------------------
+TABLA: pacientes
+- id (BIGSERIAL PRIMARY KEY)
+- nombre, apellido, dni
+- fecha_nacimiento, genero, tipo_sangre
+- estado_civil, ocupacion
+- telefono, direccion
+- contacto_emergencia, telefono_emergencia
+- caso, alergias, medicamentos
+- observaciones
+
+TABLA: doctores
+- id (BIGSERIAL PRIMARY KEY)
+- nombre, apellido, dni
+- fecha_nacimiento, genero, estado_civil
+- universidad, telefono, email, direccion
+- especialidad, numero_licencia
+- anos_experiencia, observaciones
+
+TABLA: emergencias
+- id (BIGSERIAL PRIMARY KEY)
+- nombre_completo
+- doctor_asignado
+- fecha_hora
+- estado_salud
+- observaciones
+
+DEPENDENCIAS PRINCIPALES
+-------------------------
+- Spring Boot 3.5.7
+- Spring Data JPA
+- Spring Security
+- Thymeleaf
+- PostgreSQL Driver
+- Lombok
+
+PUERTOS Y CONFIGURACION
+------------------------
+- Puerto de aplicación: 8080
+- Base de datos: PostgreSQL en localhost:5432
+- Nombre de BD: hst_db
+
+DATOS DE PRUEBA
+----------------
+El script schema.sql incluye datos de ejemplo:
+- 3 doctores
+- 3 pacientes
+- 3 emergencias
+
+NOTAS IMPORTANTES
+------------------
+1. Asegúrese de tener PostgreSQL instalado y corriendo
+2. Configurar correctamente las credenciales de la base de datos
+3. El sistema usa Spring Security con usuarios en memoria
+4. Todos los HTML ya están diseñados y funcionando
