@@ -39,23 +39,27 @@ El proyecto HST está completamente implementado con:
    - Doctores: lista, nuevo, editar
    - Emergencias: lista, nuevo, editar
 
-CONFIGURACION DE BASE DE DATOS
---------------------------------
-El proyecto está configurado para usar PostgreSQL.
+CONFIGURACION DE BASE DE DATOS - MYSQL
+---------------------------------------
+El proyecto está configurado para usar MySQL 8+.
 
 1. CREAR LA BASE DE DATOS:
    Opción A - Usar el script SQL:
    - Ubicación: database/schema.sql
-   - Ejecutar: psql -U postgres -f database/schema.sql
+   - Ejecutar: mysql -u root -p < database/schema.sql
+   - (Ingrese la contraseña de MySQL cuando se le pida)
 
    Opción B - Crear manualmente:
-   CREATE DATABASE hst_db;
+   mysql -u root -p
+   > CREATE DATABASE hst_db;
+   > USE hst_db;
+   > (Ejecutar contenido del archivo schema.sql)
 
 2. VARIABLES DE ENTORNO:
    Configurar en el archivo .env o como variables del sistema:
-   - DATABASE_URL=jdbc:postgresql://localhost:5432/hst_db
-   - DATABASE_USERNAME=postgres
-   - DATABASE_PASSWORD=postgres
+   - DATABASE_URL=jdbc:mysql://localhost:3306/hst_db?useSSL=false&serverTimezone=UTC
+   - DATABASE_USERNAME=root
+   - DATABASE_PASSWORD=(contraseña de MySQL)
 
 3. SPRING JPA:
    - Configurado con hibernate.ddl-auto=update
@@ -82,33 +86,34 @@ FLUJO DE LA APLICACIÓN
    - Gestión de Doctores
    - Gestión de Emergencias
 
-ESTRUCTURA DE LA BASE DE DATOS
---------------------------------
+ESTRUCTURA DE LA BASE DE DATOS - MYSQL
+--------------------------------------
 TABLA: pacientes
-- id (BIGSERIAL PRIMARY KEY)
+- id (BIGINT AUTO_INCREMENT PRIMARY KEY)
 - nombre, apellido, dni
 - fecha_nacimiento, genero, tipo_sangre
 - estado_civil, ocupacion
 - telefono, direccion
 - contacto_emergencia, telefono_emergencia
 - caso, alergias, medicamentos
-- observaciones
+- observaciones, created_at, updated_at
 
 TABLA: doctores
-- id (BIGSERIAL PRIMARY KEY)
+- id (BIGINT AUTO_INCREMENT PRIMARY KEY)
 - nombre, apellido, dni
 - fecha_nacimiento, genero, estado_civil
 - universidad, telefono, email, direccion
 - especialidad, numero_licencia
 - anos_experiencia, observaciones
+- created_at, updated_at
 
 TABLA: emergencias
-- id (BIGSERIAL PRIMARY KEY)
+- id (BIGINT AUTO_INCREMENT PRIMARY KEY)
 - nombre_completo
 - doctor_asignado
 - fecha_hora
 - estado_salud
-- observaciones
+- observaciones, created_at, updated_at
 
 DEPENDENCIAS PRINCIPALES
 -------------------------
@@ -116,14 +121,16 @@ DEPENDENCIAS PRINCIPALES
 - Spring Data JPA
 - Spring Security
 - Thymeleaf
-- PostgreSQL Driver
+- MySQL Connector Java 8+
 - Lombok
 
 PUERTOS Y CONFIGURACION
 ------------------------
 - Puerto de aplicación: 8080
-- Base de datos: PostgreSQL en localhost:5432
+- Base de datos: MySQL en localhost:3306
 - Nombre de BD: hst_db
+- Usuario default: root
+- Contraseña default: (sin contraseña)
 
 DATOS DE PRUEBA
 ----------------
@@ -134,7 +141,15 @@ El script schema.sql incluye datos de ejemplo:
 
 NOTAS IMPORTANTES
 ------------------
-1. Asegúrese de tener PostgreSQL instalado y corriendo
-2. Configurar correctamente las credenciales de la base de datos
+1. Asegúrese de tener MySQL Server instalado y corriendo
+2. Configurar correctamente las credenciales de MySQL en .env
 3. El sistema usa Spring Security con usuarios en memoria
 4. Todos los HTML ya están diseñados y funcionando
+5. Si cambia la contraseña de MySQL, actualizar en .env y application.properties
+6. El charset por defecto es UTF-8 (soporta caracteres especiales)
+
+REQUISITOS DEL SISTEMA
+-----------------------
+- Java 17 o superior
+- MySQL 8.0 o superior
+- Maven 3.6 o superior
